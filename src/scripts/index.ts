@@ -1,9 +1,12 @@
 import * as THREE from "three";
+import Audio from "./Audio";
 
 class BasicCanvas {
   readonly scene;
   readonly camera;
   private renderer;
+
+  private audio;
 
   private cube;
 
@@ -20,9 +23,16 @@ class BasicCanvas {
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(this.renderer.domElement);
 
+    this.audio = new Audio();
+    this.camera.add(this.audio.getListener());
+
     this.cube = this.createCube();
     this.scene.add(this.cube);
     this.renderCube();
+  }
+
+  public playAudio() {
+    this.audio.play();
   }
 
   private createCube(): THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial> {
@@ -38,4 +48,11 @@ class BasicCanvas {
     this.renderer.render(this.scene, this.camera);
   }
 }
+
 const canvas = new BasicCanvas();
+
+const playAudioButton = document.querySelector("#playAudio");
+
+playAudioButton.addEventListener("click", () => {
+  canvas.playAudio();
+});
